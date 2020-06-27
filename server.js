@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose'); // MongoDB ORM
 const bodyParser = require('body-parser'); // For parsing request body data
 
+const items = require('./routes/api/items');
+
 const app = express();
 
 // Bodyparser Middleware
@@ -15,6 +17,9 @@ mongoose
   .connect(db)
   .then(() => console.log('MongoDB Connected...'))
   .catch(error => console.log(error))
+
+// Use routes
+app.use('/api/items', items);
 
 const port = process.env.PORT || 5000 // process.env.port is an environment variable for heroku deployment
 
