@@ -23,5 +23,5 @@ app.use('/api/items', items);
 
 const port = process.env.PORT || 5000 // process.env.port is an environment variable for heroku deployment
 
-app.listen(port, () => console.log(`Server started on porrt ${port}`));
+app.listen(port, () => console.log(`Server started on port ${port}`));
 
