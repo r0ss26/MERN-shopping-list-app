@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose"); // MongoDB ORM
 const bodyParser = require("body-parser"); // For parsing request body data
 const path = require("path");
+require('dotenv').config();
 
 const items = require("./routes/api/items");
 
@@ -11,11 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // DB Config
-if (process.env.NODE_ENV === "production") {
-  const db = process.env.mongoURI;
-} else {
-  const db = require("./config/keys").mongoURI || process.env.mongoURI;
-}
+const db = process.env.mongoURI;
 
 // Connect to MongoDB
 mongoose
