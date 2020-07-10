@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const auth = require('../../middleware/auth')
 
 // Item Model
 const User = require("../../models/User");
@@ -41,5 +42,15 @@ router.post("/", (req, res) => {
     });
   });
 });
+
+// @route POST api/auth/user
+// @desc  Get user data
+// @acess Private
+router.get('/user', auth, (req, res) => {
+  User.findById(req.user.id)
+    .select('-password')
+    .then(user => res.json(user))
+})
+
 
 module.exports = router;
