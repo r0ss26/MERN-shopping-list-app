@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   UncontrolledCollapse,
   Navbar,
@@ -7,39 +7,77 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Container
-} from 'reactstrap';
+  Container,
+} from "reactstrap";
+import { connect } from "react-redux";
+import RegisterModal from "./auth/registerModal";
+import LoginModal from "./auth/LoginModal";
+import Logout from "./auth/Logout";
+import PropTypes from "prop-types";
+
 
 class AppNavbar extends Component {
-  // state = {
-  //   isOpen: false
-  // }
+  state = {
+    isOpen: false,
+  };
+
+  static propTypes = {
+    auth: PropTypes.object.isRequired,
+  };
 
   toggle = () => {
     this.setState({
-      isOpen: !this.state.isOpen
-    })
-  }
+      isOpen: !this.state.isOpen,
+    });
+  };
 
   render() {
+    const { isAuthenticated, user } = this.props.auth;
+
+    const authLinks = (
+      <>
+        <NavItem>
+          <span className="navbar-text mr-3">
+              <strong>{user ? `Welcome ${user.name}` : ''}</strong>
+          </span>
+        </NavItem>
+        <NavItem>
+          <Logout />
+        </NavItem>
+      </>
+    );
+
+    const guestLinks = (
+      <>
+        <NavItem>
+          <RegisterModal />
+        </NavItem>
+        <NavItem>
+          <LoginModal />
+        </NavItem>
+      </>
+    );
+
     return (
       <div>
         <Navbar color="dark" dark expand="sm" className="mb-5">
           <Container>
             <NavbarBrand href="/">Shopping List</NavbarBrand>
             <NavbarToggler id="toggler" onClick={this.toggle} />
-            <UncontrolledCollapse toggler="#toggler" navbar >
-              <Nav className="ml-auto" navbar>  
-                <NavItem>
-                  <NavLink href="https://github.com/r0ss26/MERN-shopping-list-app">GitHub</NavLink>
-                </NavItem>
+            <UncontrolledCollapse toggler="#toggler" navbar>
+              <Nav className="ml-auto" navbar>
+                {isAuthenticated ? authLinks : guestLinks}
               </Nav>
             </UncontrolledCollapse>
           </Container>
         </Navbar>
       </div>
-    )
+    );
   }
 }
 
-export default AppNavbar;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps, null)(AppNavbar);
